@@ -1,9 +1,10 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Player/Player.png" type="Texture" id=2]
 [ext_resource path="res://Overlap/Hitbox.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Player/SwordHitbox.gd" type="Script" id=4]
+[ext_resource path="res://Overlap/Hurtbox.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 5.0
@@ -12,7 +13,6 @@ height = 2.0
 [sub_resource type="Animation" id=25]
 resource_name = "AttackDown"
 length = 0.4
-loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -229,7 +229,6 @@ tracks/3/keys = {
 [sub_resource type="Animation" id=10]
 resource_name = "IdleDown"
 length = 0.1
-loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -242,11 +241,22 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 18 ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("../HitboxPivet/SwordHitbox/CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
 
 [sub_resource type="Animation" id=9]
 resource_name = "IdleLeft"
 length = 0.1
-loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -263,7 +273,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=7]
 resource_name = "IdleRight"
 length = 0.1
-loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -292,7 +301,6 @@ tracks/1/keys = {
 [sub_resource type="Animation" id=8]
 resource_name = "IdleUp"
 length = 0.1
-loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
@@ -647,6 +655,10 @@ graph_offset = Vector2( 0, 90.1636 )
 [sub_resource type="CapsuleShape2D" id=36]
 height = 12.0
 
+[sub_resource type="CapsuleShape2D" id=48]
+radius = 7.0
+height = 8.0
+
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
 script = ExtResource( 1 )
@@ -693,6 +705,7 @@ parameters/Run/blend_position = Vector2( 0, 1 )
 
 [node name="HitboxPivet" type="Position2D" parent="."]
 position = Vector2( 0, -4 )
+rotation = 1.5708
 
 [node name="SwordHitbox" parent="HitboxPivet" instance=ExtResource( 3 )]
 position = Vector2( 16, -8 )
@@ -706,4 +719,15 @@ __meta__ = {
 position = Vector2( 0, 7 )
 shape = SubResource( 36 )
 
+[node name="Hurtbox" parent="." instance=ExtResource( 5 )]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2( 0, -8 )
+shape = SubResource( 48 )
+
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+
 [editable path="HitboxPivet/SwordHitbox"]
+[editable path="Hurtbox"]

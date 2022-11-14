@@ -13,6 +13,10 @@ config_version=4
 config/name="Rpg Tutorial"
 run/main_scene="res://World.tscn"
 
+[autoload]
+
+PlayerStats="*res://Player/PlayerStats.tscn"
+
 [debug]
 
 settings/stdout/print_fps=true
